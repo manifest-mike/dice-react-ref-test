@@ -1,23 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useRef, useState} from 'react';
 import './App.css';
+import DiceGroup, {DiceGroupRef} from "./dice/DiceGroup";
 
 function App() {
+    const diceGroupRef = useRef<DiceGroupRef>(null);
+    const [total, setTotal] = useState(0);
+
+    function updateTotal(val: string) {
+        try {
+            setTotal(parseInt(val))
+        } catch(e) {
+            setTotal(0);
+        }
+    }
+
+    function runDice() {
+        diceGroupRef.current?.rollAllDice();
+    }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Test Dice App</h1>
+          <div>
+            <input type="number" value={total} onChange={(e) => updateTotal(e.target.value)} />
+          </div>
+          <button type="button" onClick={runDice}>Roll Group</button>
+          <DiceGroup ref={diceGroupRef} total={total} />
       </header>
     </div>
   );
